@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, TouchableOpacity, ImageBackground, Text, StyleSheet } from 'react-native';
 
-import Colors from '../constants/Colors';
-
 export default class TodayHeader extends React.Component {
     render() {
         return (
             <ImageBackground 
-                source={require('../assets/images/today-bg.png')}
-                style={{width: '100%', height: 250}}
+                source={require('../../assets/images/today-bg.png')}
+                style={{width: '100%', height: 300}}
             >
                 <Text style={styles.title}>Hello, Faizaan!</Text>
                 <Text style={styles.info}>Busy day! You have 32 tasks to complete.</Text>
@@ -32,13 +30,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 28,
         fontWeight: 'bold',
-        paddingTop: 40,
+        paddingTop: 90,
         color: 'white',
         fontFamily: 'roboto-slab'
     },
     info: {
         textAlign: 'center',
-        paddingTop: 10,
+        paddingTop: 20,
         color: 'white'
     },
     startSessionButtonView: {

@@ -5,7 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 // Import all the main pages, that are shown on each tab
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
+import TodayScreen from '../screens/TodayScreen';
 import TasksScreen from '../screens/TasksScreen';
 import TrendsScreen from '../screens/TrendsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -19,11 +19,11 @@ getPlatformIcon = (iconName) => {
 // A navigation stack is like a stack of papers. You can switch between tabs
 // and it'll remember which screen was being shown on each tab, so that navigation is seamless.
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+const TodayStack = createStackNavigator({
+  Today: TodayScreen,
 });
 
-HomeStack.navigationOptions = {
+TodayStack.navigationOptions = {
   tabBarLabel: 'Today', // label shown to users
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -78,7 +78,7 @@ SettingsStack.navigationOptions = {
 // finally, create the navigator using all four stacks.
 
 export default createBottomTabNavigator({
-  HomeStack,
+  TodayStack,
   TasksStack,
   TrendsStack,
   SettingsStack,

@@ -37,7 +37,7 @@ export default class App extends React.Component {
         ...Icon.Ionicons.font,
         'roboto': require('./assets/fonts/Roboto-Regular.ttf'),
         'roboto-slab': require('./assets/fonts/RobotoSlab-Regular.ttf'),
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        'sourcesanspro': require('./assets/fonts/SourceSansPro-Regular.ttf'),
       }),
     ]);
   };

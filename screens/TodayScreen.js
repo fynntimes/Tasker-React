@@ -7,12 +7,11 @@ import {
   View,
 } from 'react-native'; 
 
-import StatusBar from '../components/StatusBar'
-import TodayHeader from '../components/TodayHeader'
-import TodayTaskList from '../components/TodayTaskList'
-import TodayTask from '../components/TodayTask'
+import TodayHeader from '../components/today/TodayHeader'
+import TodayTaskList from '../components/today/TodayTaskList'
+import TodayTask from '../components/today/TodayTask'
 
-export default class HomeScreen extends React.Component {
+export default class TodayScreen extends React.Component {
   static navigationOptions = {
     header: null, // we don't want a header here because we have a custom greeting for this page
   };
@@ -20,7 +19,6 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar/>
         <TodayHeader></TodayHeader>
         <ScrollView style={styles.contentContainer}>
           <TodayTaskList>
