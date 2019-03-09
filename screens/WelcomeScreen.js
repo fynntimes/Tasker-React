@@ -1,5 +1,7 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native'
+import { Icon } from 'expo';
+
 
 /*
 This screen shows when the user first launches the app after installing it.
@@ -8,23 +10,87 @@ It prompts the user to either create an account or log in.
 
 export default class WelcomeScreen extends React.Component {
     static navigationOptions = {
-        title: 'Welcome', /* set the title for the nav bar */
+        header: null, /* we don't want a nav bar in here */
     }
 
     render() {
         return (
-            <ScrollView style={styles.container}>
-                <Text>Hey there!</Text>
-            </ScrollView>
-        )
+            <View style={styles.container}>
+                <Icon.Foundation name="checkbox" size={192} style={{paddingTop: 100, color: '#2f95dc'}}></Icon.Foundation> 
+                <Text style={styles.title}>Welcome to Tasker.</Text>
+                <Text style={styles.subtitle}>Take control of your life.</Text>
+                <Text style={styles.authInstructions}>Choose a sign-in option below.</Text>
+
+                <TouchableOpacity onPress={this.letIn} style={[styles.button, styles.demoButton]}>
+                    <Text style={styles.buttonText}>Demo Access</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={this.letIn} style={[styles.button, styles.googleButton]}>
+                    <Text style={styles.buttonText}>
+                        <Icon.Ionicons name="logo-google"></Icon.Ionicons> Sign-in with Google
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={this.letIn} style={[styles.button, styles.facebookButton]}>
+                    <Text style={styles.buttonText}>
+                        <Icon.Ionicons name="logo-facebook"></Icon.Ionicons> Sign-in with Facebook
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        ) 
     }
 
-}
+    letIn = async () => {
+        await AsyncStorage.setItem('userToken', 'abc');
+        this.props.navigation.navigate('Main');
+    }
+
+} 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 15,
-        backgroundColor: '#fff'
+        backgroundColor: '#eee',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 36,
+        fontFamily: 'roboto-slab',
+        color: 'black'
+    },
+    subtitle: {
+        fontSize: 16,
+        fontFamily: 'roboto',
+        color: 'black'
+    },
+    authInstructions: {
+        paddingTop: 100,
+        fontFamily: 'roboto',
+        color: 'black',
+        marginBottom: 10
+    },
+    buttonText: {
+      color: 'white',
+      textTransform: 'uppercase',
+      fontSize: 16,
+      lineHeight: 16
+    },
+    button: {
+        width: '80%',
+        height: 50,
+        borderRadius: 5,
+        marginBottom: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    demoButton: {
+        backgroundColor: '#383838',
+    },
+    googleButton: {
+        backgroundColor: '#DB4437',
+    },
+    facebookButton: {
+        backgroundColor: '#3C5A99'
     }
 })

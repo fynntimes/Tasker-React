@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  AsyncStorage
 } from 'react-native'; 
 
 import TodayHeader from '../components/today/TodayHeader'
@@ -17,6 +18,7 @@ export default class TodayScreen extends React.Component {
   };
 
   render() {
+    AsyncStorage.clear() 
     return (
       <View style={styles.container}>
         <TodayHeader></TodayHeader>
@@ -35,7 +37,6 @@ export default class TodayScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ff0000',
   },
   contentContainer: {
     backgroundColor: '#F6F6F6',
