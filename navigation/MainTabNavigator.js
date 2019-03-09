@@ -10,6 +10,12 @@ import TasksScreen from '../screens/TasksScreen';
 import TrendsScreen from '../screens/TrendsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
+// all icons have an iOS or Android (MD) icon, so we check which platform we're on and serve the correct icon here.
+getPlatformIcon = (iconName) => {
+  if(Platform.OS === 'ios') return 'ios-' + iconName;
+  else return 'md-' + iconName;
+}
+
 // A navigation stack is like a stack of papers. You can switch between tabs
 // and it'll remember which screen was being shown on each tab, so that navigation is seamless.
 
@@ -18,15 +24,11 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home', // label shown to users
+  tabBarLabel: 'Today', // label shown to users
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}` 
-          : 'md-information-circle'
-      }
+      name={getPlatformIcon('today')}
     />
   ),
 };
@@ -40,7 +42,7 @@ TasksStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-list' : 'md-list'}
+      name={getPlatformIcon('list')}
     />
   ),
 };
@@ -54,7 +56,7 @@ TrendsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-bar-chart' : 'md-bar-chart'}
+      name={getPlatformIcon('trending-up')}
     />
   ),
 };
@@ -68,7 +70,7 @@ SettingsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={getPlatformIcon('options')}
     />
   ),
 };

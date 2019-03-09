@@ -5,6 +5,7 @@ import Colors from '../constants/Colors';
 
 export default class TabBarIcon extends React.Component {
   render() {
+    // layout: all tab bar icons have a size of 26 by 26 pixels and we shif the text up three pixels (margin bottom -3px)
     return (
       <Icon.Ionicons
         name={this.props.name}
