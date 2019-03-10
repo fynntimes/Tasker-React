@@ -4,11 +4,19 @@ import { LinearGradient, Icon } from 'expo';
 
 export default class TodayTask extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        // we passed in our task object via a JSON string, since we can't pass through Objects as properties.
+        // we have to parse that as an object again here.
+        this.task = JSON.parse(this.props.task)
+    }
+
     render() {
         return (
-            <LinearGradient colors={this.props.colors} style={styles.taskView}>
+            <LinearGradient colors={this.getColor()} style={styles.taskView}>
                 {/* Here we define each part of the task item. The title and description are below. */}
-                <Text style={styles.taskTitle}>{this.props.taskTitle}</Text>
+                <Text style={styles.taskTitle}>{this.task.title}</Text>
                 <Text style={styles.taskDescription}>{this.props.taskDescription}</Text>
 
                 {/*And here, we have the task duration, which consists of two parts: the clock icon, and the task duration text.
@@ -34,6 +42,14 @@ export default class TodayTask extends React.Component {
                 </View>
             </LinearGradient>
         );
+    }
+
+    // assign specific colors to specific priorities. high priority? red. medium? yellow. low? blue.
+    getColor = () => {
+        priority = this.task.priority;
+        if(priority < 200) return ['#42B1FF', '#73C5FF'];
+        else if(priority < 600) return ['#ED9700', '#EBA52B'];
+        else return ['#FF4242', '#FF6F6F'];
     }
 
     markComplete = () => {

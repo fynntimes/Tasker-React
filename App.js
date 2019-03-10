@@ -2,13 +2,23 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import firebase from 'firebase'; 
+
+var firebaseConfig = {
+  apiKey: "AIzaSyAy_YfdEVsA0W990bfm2eoZ51R42wlIHDQ",
+  authDomain: "tasker-fair.firebaseapp.com",
+  databaseURL: "https://tasker-fair.firebaseio.com",
+  projectId: "tasker-fair",
+  storageBucket: "tasker-fair.appspot.com",
+  messagingSenderId: "1029324922421"
+}
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
 
-  render() {
+  render() { 
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -40,6 +50,12 @@ export default class App extends React.Component {
         'roboto-slab': require('./assets/fonts/RobotoSlab-Regular.ttf'),
         'sourcesanspro': require('./assets/fonts/SourceSansPro-Regular.ttf'),
       }),
+      new Promise((resolve, reject) => {
+        if(!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+          resolve("initialized")
+        }
+      })
     ]);
   };
 
