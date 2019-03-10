@@ -5,15 +5,19 @@ import MainTabNavigator from './MainTabNavigator';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 
+// temporary
+import SessionScreen from '../screens/SessionScreen';
+
 const AuthStack = createStackNavigator({ Welcome: WelcomeScreen });
 
 export default createAppContainer(createSwitchNavigator(
   {
+    CreateSessTemp: SessionScreen,
     AuthLoading: AuthLoadingScreen,
     Main: MainTabNavigator,
     Auth: AuthStack,
   },
   {
-    initialRouteName: 'AuthLoading',
+    initialRouteName: 'CreateSessTemp',
   }
 ));

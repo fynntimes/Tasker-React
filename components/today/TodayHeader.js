@@ -13,7 +13,7 @@ export default class TodayHeader extends React.Component {
 
                 <View style={styles.startSessionButtonView}>
                     <TouchableOpacity style={styles.startSessionButton} activeOpacity={0.7} onPress={this.startSession}>
-                        <Text style={{color: 'white'}}>Start Session</Text>
+                        <Text style={{color: 'white'}}>Start a work session</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

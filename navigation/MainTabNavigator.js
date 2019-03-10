@@ -9,7 +9,6 @@ import TodayScreen from '../screens/TodayScreen';
 import TasksScreen from '../screens/TasksScreen';
 import TrendsScreen from '../screens/TrendsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import WelcomeScreen from '../screens/WelcomeScreen';
 
 // all icons have an iOS or Android (MD) icon, so we check which platform we're on and serve the correct icon here.
 getPlatformIcon = (iconName) => {

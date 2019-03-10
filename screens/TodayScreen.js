@@ -3,7 +3,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  RefreshControl
+  RefreshControl,
+  AsyncStorage 
 } from 'react-native'; 
 
 import * as firebase from 'firebase';
@@ -53,8 +54,7 @@ export default class TodayScreen extends React.Component {
     })
   }
 
-  render() { 
-    // AsyncStorage.clear()
+  render() {
     return (
       <View style={styles.container}>
         <TodayHeader></TodayHeader>
