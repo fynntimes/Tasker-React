@@ -21,7 +21,7 @@ export default class TodayHeader extends React.Component {
     }
 
     startSession = () => {
-        console.log("started session")
+        this.props.navigation.navigate('CreateSessTemp')
     }
 }
 

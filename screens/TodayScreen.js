@@ -57,7 +57,7 @@ export default class TodayScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TodayHeader></TodayHeader>
+        <TodayHeader navigation={this.props.navigation}></TodayHeader>
         <ScrollView 
           style={styles.contentContainer}
           refreshControl= {
