@@ -1,6 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient, Icon } from 'expo';
+import { markTaskComplete } from '../../data/Task';
+import moment from 'moment';
+
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class TodayTask extends React.Component {
 
@@ -10,10 +15,15 @@ export default class TodayTask extends React.Component {
         // we passed in our task object via a JSON string, since we can't pass through Objects as properties.
         // we have to parse that as an object again here.
         this.task = JSON.parse(this.props.task)
+        this.state = {
+            complete: this.task.complete
+        };
+        console.log(firebase.firestore.Timestamp.fromDate(new Date()));
     }
 
     render() {
-        return (
+        if(this.state.complete) return null;
+        else return (
             <LinearGradient colors={this.getColor()} style={styles.taskView}>
                 {/* Here we define each part of the task item. The title and description are below. */}
                 <Text style={styles.taskTitle}>{this.task.title}</Text>
@@ -25,7 +35,7 @@ export default class TodayTask extends React.Component {
                 the icon and the text are shown on the same row thanks to some styling. */}
                 <View style={styles.taskDuration}>
                     <Icon.MaterialCommunityIcons name='clock-outline' size={14} style={{color: 'white'}} />
-                    <Text style={{color: 'white', lineHeight: 14}}> {this.getDurationString()}</Text>
+                    <Text style={{color: 'white', lineHeight: 14}}> due on {}</Text>
                 </View>
 
                 {/* What follows is the button row, a horizontal row of three buttons that represent actionable items for the task. */}
@@ -71,7 +81,9 @@ export default class TodayTask extends React.Component {
     }
 
     markComplete = () => {
-        console.log("marked complete")
+        markTaskComplete("task" + this.task.id)
+        this.setState({ complete: true }) 
+        this.props.toastRef.show("Task marked as complete!")
     }
 
     editTask = () => {

@@ -7,10 +7,35 @@ import CircleButton from '../components/CircleButton';
 import SessionTaskList from '../components/session/SessionTaskList';
 import SessionTask from '../components/session/SessionTask';
 
+import { getTasks, calculatePriorityScore, markTaskComplete } from '../data/Task';
+
+// this screen is shown when the user is working on a work session
+// it shows a countdown and a list of possible tasks.
+
 export default class SessionScreen extends React.Component {  
     static navigationOptions = {
-        header: null, // we don't want a header here because we have a better thing.
+        header: null, // we don't want a header here, not in the design
     };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tasks: [],
+        };
+    }
+
+    _refresh() {
+        getTasks().then((newTasks) => {
+            taskMap = {} // maps tasks to priorities
+            newTasks.forEach((task) => {
+                // calculate the priority score for each task
+                priorityScore = calculatePriorityScore(task);
+                taskMap[task] = priorityScore;
+            })
+            this.setState({tasks: taskMap});
+        });
+    }
 
     render() {
         return (
@@ -29,6 +54,13 @@ export default class SessionScreen extends React.Component {
                 </View>
                 <ScrollView style={{ marginBottom: 30 }}>
                     <SessionTaskList>
+                        {
+                            () => {
+                                for(var task in this.state.tasks) {
+                                    priority = this.state.tasks[task];
+                                }
+                            }
+                        }
                         <SessionTask selected={true} completeCallback={() => {
                             console.log("completed the selected task")
                         }}/>

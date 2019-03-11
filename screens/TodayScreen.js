@@ -5,17 +5,14 @@ import {
   View,
   RefreshControl,
   TouchableOpacity,
-  Text
 } from 'react-native'; 
 import { Icon } from 'expo';
-
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import Toast from 'react-native-easy-toast';
+import { getTasks } from '../data/Task';
 
 import TodayHeader from '../components/today/TodayHeader'
 import TodayTaskList from '../components/today/TodayTaskList'
 import TodayTask from '../components/today/TodayTask'
-import CircleButton from '../components/CircleButton'
 
 
 export default class TodayScreen extends React.Component {
@@ -30,32 +27,15 @@ export default class TodayScreen extends React.Component {
     // initially, we have an empty array of tasks and a loading circle in our state.
     this.state = { tasks: [], loading: true }
 
-    this.getTasks().then((tasks) => {
+    getTasks().then((tasks) => {
       this.setState({tasks: tasks, loading: false})
     })
   }
 
-  // here, we asynchronously fetch all tasks from our database.
-  // we store the results in a task array, and return that array of tasks.
-  getTasks = async () => {
-    tasks = [];
-
-    await firebase.firestore().collection('tasks').get()
-      .then(querySnapshot => {
-        querySnapshot.docs.forEach(doc => {
-          tasks.push(doc.data());
-      });
-    });
-    return tasks;
-  }
-
   _refresh = () => {
     // tasks are collected asynchronously, so once we do get them, we set the state accordingly.
-    this.getTasks().then((newTasks) => {
-      console.log(this.state)
+    this.getTasks().then((newTasks) => { 
       this.setState({tasks: newTasks, loading: false})
-      console.log("after")
-      console.log(this.state)
     })
   }
 
@@ -73,14 +53,17 @@ export default class TodayScreen extends React.Component {
           <TodayTaskList>
             {this.state.tasks.map((task) => {
               return (
-                  <TodayTask key={task.id} colors={['#FF4242', '#FF6F6F']} task={JSON.stringify(task)} taskTitle={task.title} taskDescription="light task, very high priority" taskDuration="about 5 minutes"></TodayTask>
+                  <TodayTask key={task.id} task={JSON.stringify(task)} toastRef={this.refs.toast}/>
                 ); 
             })}
           
           </TodayTaskList>
         </ScrollView>
         
+        {/* a floating button in the bottom right that lets users at a task */}
         <TouchableOpacity style={styles.addButton} onPress={() => {
+          // we navigate to the task screen, and we include a callback so that
+          // when we return to this page, it refreshes to show the new task.
           this.props.navigation.navigate("AddTask", {
             onGoBack: () => {
               this._refresh()
@@ -89,6 +72,8 @@ export default class TodayScreen extends React.Component {
         }}>
             <Icon.Ionicons name="ios-add" color="white" size={30} /> 
         </TouchableOpacity>
+
+        <Toast ref="toast"/>
       </View>
     );
   }

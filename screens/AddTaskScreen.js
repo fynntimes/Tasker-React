@@ -1,14 +1,19 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { Container, Content, Form, Item, Picker, Label, Input, DatePicker, Button, Text } from 'native-base';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Container, Content, Form, Item, Picker, Label, Input, DatePicker, Text } from 'native-base';
 import { storeNewTask } from '../data/Task'
 import moment from 'moment';
 
+// a simple form to add a task to a database
+// uses the native-base UI library since React Native doesn't come with forms built in
+
 export default class AddTaskScreen extends React.Component {
     static navigationOptions = {
-        title: 'Add Task',
+        title: 'Add Task', // set the title, we allow this view to have a header so that we can see the back button
     };
 
+    // define the state with default values in case the user doesn't fill out the form
+    // state is used to keep track of user input 
     constructor(props) {
         super(props);
         this.state = {
@@ -18,6 +23,8 @@ export default class AddTaskScreen extends React.Component {
             dueDate: new Date(),
         }
     }
+
+    // the following methods are callbacks to update the state on an input change
 
     onTitleChange(value) {
         this.setState({ taskTitle: value });
@@ -35,10 +42,12 @@ export default class AddTaskScreen extends React.Component {
         this.setState({dueDate: value});
     }
 
+    // create a task from the user values
     createTask(state) {
+        // referencing the storeNewTask method from Task, which accepts a callback as its last argument
         storeNewTask(state.taskTitle, state.priority, state.length, state.dueDate, () => {
-            this.props.navigation.state.params.onGoBack();
-            this.props.navigation.goBack();
+            this.props.navigation.state.params.onGoBack(); // refresh the view via the callback we passed in
+            this.props.navigation.goBack(); // go back to the home sreen 
         });
     }
 
@@ -49,7 +58,7 @@ export default class AddTaskScreen extends React.Component {
                 <Form>
                     <Item stackedLabel>
                         <Label>Task name</Label>
-                        <Input placeholder="Enter a name" onChangeText={ (text) => this.onTitleChange(text) } />
+                        <Input placeholder="Untitled task" onChangeText={ (text) => this.onTitleChange(text) } />
                     </Item>
 
                     <Item picker stackedLabel>
@@ -86,25 +95,23 @@ export default class AddTaskScreen extends React.Component {
                         </Picker>
                     </Item>
 
+                    {/* Define a datepicker to select a due date for the task */}
                     <Item stackedLabel>
                         <Label>Select a due date</Label>
                         <DatePicker
                             defaultDate={new Date()}
                             minimumDate={new Date()}
-                            locale={"en"}
-                            timeZoneOffsetInMinutes={undefined}
-                            modalTransparent={false}
                             animationType={"slide"}
-                            androidMode={"default"}
                             placeHolderText={ moment(this.state.dueDate).format('MM/DD/YYYY') }
                             formatChosenDate={ (value) => moment(value).format("MM/DD/YYYY")}
                             textStyle={{ color: "green" }}
                             onDateChange={(value) => { this.onDateChange(value) }}
-                            placeHolderTextStyle={{ color: "#d3d3d3" }}
-                            />
+                            placeHolderTextStyle={{ color: "#d3d3d3" }} />
                     </Item>
+
+                    {/* submit button */}
                     <TouchableOpacity full onPress={() =>  this.createTask(this.state)}
-                        style={{width: "100%", height: 50, backgroundColor: "rgb(47, 149, 220)", alignItems: "center", justifyContent: "center"}}>
+                        style={styles.submitButton}>
                         <Text style={{color: 'white'}}>Create task</Text>
                     </TouchableOpacity>
                 </Form>
@@ -112,4 +119,15 @@ export default class AddTaskScreen extends React.Component {
             </Container>
         );
     }
+
 }
+
+const styles = StyleSheet.create({
+    submitButton: {
+        width: "100%", 
+        height: 50, 
+        backgroundColor: "rgb(47, 149, 220)", 
+        alignItems: "center",
+        justifyContent: "center"
+    }
+});
