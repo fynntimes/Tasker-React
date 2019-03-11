@@ -27,71 +27,44 @@ export default class SessionScreen extends React.Component {
 
     _refresh() {
         getTasks().then((newTasks) => {
-            taskMap = {} // maps tasks to priorities
+            taskMap = {} // maps priorities to tasks
             newTasks.forEach((task) => {
                 // calculate the priority score for each task
                 priorityScore = calculatePriorityScore(task);
                 taskMap[task] = priorityScore;
             })
-            this.setState({tasks: taskMap});
+            
+            sorted = new Map([...taskMap.entries()].sort((a, b) => b[1] - a[1]));
+            this.setState({tasks: sorted});
         });
     }
 
     render() {
         return (
             <LinearGradient colors={['#1D976C', '#93F9B9']} style={styles.container}>
+                
                 <View style={styles.headerContainer}>
                     {/* todo this text should also say "taking a break" when applicable */}
                     <Text style={[styles.infoText, {fontSize: 16}]}>It's time to work.</Text>
                     <SessionTimer countdownDuration="25:00" />                    
                 </View>
+                
                 <View style={styles.buttonContainer}>
                     <CircleButton name="pause" size={50} iconSize={25} style={{paddingRight: 10}} onPress={this._takeBreak}/>
                     <CircleButton name="fastforward" size={50} iconSize={25} onPress={this._endSession} />
                 </View>
+                
                 <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
                     <Text style={[styles.infoText, {fontSize: 12}]}>Tap a task to pause the current one and switch to it.</Text>
                 </View>
+
                 <ScrollView style={{ marginBottom: 30 }}>
                     <SessionTaskList>
                         {
-                            () => {
-                                for(var task in this.state.tasks) {
-                                    priority = this.state.tasks[task];
-                                }
-                            }
+                            Object.keys(this.state.tasks).map((task) => {
+                                return <SessionTask task={JSON.stringify(task)} selected={false} completeCallback={() => {}}/>
+                            })
                         }
-                        <SessionTask selected={true} completeCallback={() => {
-                            console.log("completed the selected task")
-                        }}/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
-                        <SessionTask completeCallback={() => {
-                            console.log("completed a task")
-                        }}/>
-                        <SessionTask/>
                     </SessionTaskList>
                 </ScrollView>
             </LinearGradient>
