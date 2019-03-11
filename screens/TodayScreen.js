@@ -4,16 +4,19 @@ import {
   StyleSheet,
   View,
   RefreshControl,
-  AsyncStorage 
+  TouchableOpacity,
+  Text
 } from 'react-native'; 
+import { Icon } from 'expo';
 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-import Loading from '../components/Loading'
 import TodayHeader from '../components/today/TodayHeader'
 import TodayTaskList from '../components/today/TodayTaskList'
 import TodayTask from '../components/today/TodayTask'
+import CircleButton from '../components/CircleButton'
+
 
 export default class TodayScreen extends React.Component {
   static navigationOptions = {
@@ -47,10 +50,12 @@ export default class TodayScreen extends React.Component {
   }
 
   _refresh = () => {
-    console.log('refresshing')
     // tasks are collected asynchronously, so once we do get them, we set the state accordingly.
     this.getTasks().then((newTasks) => {
+      console.log(this.state)
       this.setState({tasks: newTasks, loading: false})
+      console.log("after")
+      console.log(this.state)
     })
   }
 
@@ -68,12 +73,22 @@ export default class TodayScreen extends React.Component {
           <TodayTaskList>
             {this.state.tasks.map((task) => {
               return (
-                <TodayTask key={task.id} colors={['#FF4242', '#FF6F6F']} task={JSON.stringify(task)} taskTitle={task.title} taskDescription="light task, very high priority" taskDuration="about 5 minutes"></TodayTask>
-              ); 
+                  <TodayTask key={task.id} colors={['#FF4242', '#FF6F6F']} task={JSON.stringify(task)} taskTitle={task.title} taskDescription="light task, very high priority" taskDuration="about 5 minutes"></TodayTask>
+                ); 
             })}
           
           </TodayTaskList>
         </ScrollView>
+        
+        <TouchableOpacity style={styles.addButton} onPress={() => {
+          this.props.navigation.navigate("AddTask", {
+            onGoBack: () => {
+              this._refresh()
+            }
+          })
+        }}>
+            <Icon.Ionicons name="ios-add" color="white" size={30} /> 
+        </TouchableOpacity>
       </View>
     );
   }
@@ -83,8 +98,26 @@ export default class TodayScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F6F6F6',
   },
   contentContainer: {
     backgroundColor: '#F6F6F6',
   },
+  addButton: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+    borderRadius: 50,
+    backgroundColor: 'rgba(47, 149, 220, 0.95)',
+    shadowColor: 'rgba(0, 0, 0, 0.3)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 4,
+    shadowOffset : { width: 1, height: 1},
+  }
 });

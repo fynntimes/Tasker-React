@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient, Icon } from 'expo';
 
 import SessionTimer from '../components/session/SessionTimer';
@@ -7,7 +7,10 @@ import CircleButton from '../components/CircleButton';
 import SessionTaskList from '../components/session/SessionTaskList';
 import SessionTask from '../components/session/SessionTask';
 
-export default class SessionScreen extends React.Component {
+export default class SessionScreen extends React.Component {  
+    static navigationOptions = {
+        header: null, // we don't want a header here because we have a better thing.
+    };
 
     render() {
         return (
@@ -21,18 +24,44 @@ export default class SessionScreen extends React.Component {
                     <CircleButton name="pause" size={50} iconSize={25} style={{paddingRight: 10}} onPress={this._takeBreak}/>
                     <CircleButton name="fastforward" size={50} iconSize={25} onPress={this._endSession} />
                 </View>
-                <View style={{ alignItems: 'center', marginTop: 20 }}>
+                <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
                     <Text style={[styles.infoText, {fontSize: 12}]}>Tap a task to pause the current one and switch to it.</Text>
-                </View> 
-                <SessionTaskList>
-                    <SessionTask selected={true} completeCallback={() => {
-                        console.log("completed the selected task")
-                    }}/>
-                    <SessionTask completeCallback={() => {
-                        console.log("completed a task")
-                    }}/>
-                    <SessionTask/>
-                </SessionTaskList>
+                </View>
+                <ScrollView style={{ marginBottom: 30 }}>
+                    <SessionTaskList>
+                        <SessionTask selected={true} completeCallback={() => {
+                            console.log("completed the selected task")
+                        }}/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                        <SessionTask completeCallback={() => {
+                            console.log("completed a task")
+                        }}/>
+                        <SessionTask/>
+                    </SessionTaskList>
+                </ScrollView>
             </LinearGradient>
         );
     }
@@ -43,7 +72,7 @@ export default class SessionScreen extends React.Component {
 
     _endSession = () => {
         // todo summary screen
-        this.props.navigation.navigate('Main')
+        this.props.navigation.navigate('Today')
     };
 
 }

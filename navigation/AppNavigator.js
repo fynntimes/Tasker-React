@@ -4,20 +4,25 @@ import { createAppContainer, createSwitchNavigator, createStackNavigator } from 
 import MainTabNavigator from './MainTabNavigator';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
-
-// temporary
 import SessionScreen from '../screens/SessionScreen';
+import AddTaskScreen from '../screens/AddTaskScreen';
+import TodayScreen from '../screens/TodayScreen';
 
 const AuthStack = createStackNavigator({ Welcome: WelcomeScreen });
 
+const TodayStack = createStackNavigator({
+  Today: TodayScreen,
+  AddTask: AddTaskScreen,
+  Session: SessionScreen
+});
+
 export default createAppContainer(createSwitchNavigator(
   {
-    CreateSessTemp: SessionScreen,
     AuthLoading: AuthLoadingScreen,
-    Main: MainTabNavigator,
     Auth: AuthStack,
+    Main: TodayStack
   },
   {
-    initialRouteName: 'CreateSessTemp',
+    initialRouteName: 'AuthLoading',
   }
 ));

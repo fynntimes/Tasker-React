@@ -17,13 +17,15 @@ export default class TodayTask extends React.Component {
             <LinearGradient colors={this.getColor()} style={styles.taskView}>
                 {/* Here we define each part of the task item. The title and description are below. */}
                 <Text style={styles.taskTitle}>{this.task.title}</Text>
-                <Text style={styles.taskDescription}>{this.props.taskDescription}</Text>
+                <Text style={styles.taskDescription}>
+                    {this.getWeightString()} task, {this.task.priority === "veryHigh" ? "very high" : this.task.priority} priority
+                </Text>
 
                 {/*And here, we have the task duration, which consists of two parts: the clock icon, and the task duration text.
                 the icon and the text are shown on the same row thanks to some styling. */}
                 <View style={styles.taskDuration}>
                     <Icon.MaterialCommunityIcons name='clock-outline' size={14} style={{color: 'white'}} />
-                    <Text style={{color: 'white', lineHeight: 14}}> {this.props.taskDuration}</Text>
+                    <Text style={{color: 'white', lineHeight: 14}}> {this.getDurationString()}</Text>
                 </View>
 
                 {/* What follows is the button row, a horizontal row of three buttons that represent actionable items for the task. */}
@@ -47,9 +49,25 @@ export default class TodayTask extends React.Component {
     // assign specific colors to specific priorities. high priority? red. medium? yellow. low? blue.
     getColor = () => {
         priority = this.task.priority;
-        if(priority < 200) return ['#42B1FF', '#73C5FF'];
-        else if(priority < 600) return ['#ED9700', '#EBA52B'];
+        if(priority === "low") return ['#42B1FF', '#73C5FF'];
+        else if(priority === "normal") return ['#ED9700', '#EBA52B'];
         else return ['#FF4242', '#FF6F6F'];
+    }
+
+    getWeightString = () => {
+        weight = this.task.duration;
+        if(weight === "low") return "light";
+        else if(weight === "normal") return "moderate";
+        else if(weight === "high") return "heavy";
+        else return "very heavy";
+    }
+
+    getDurationString = () => {
+        weight = this.task.duration;
+        if(weight === "low") return "about 5 minutes";
+        else if(weight === "normal") return "about an hour";
+        else if(weight === "high") return "around a few hours";
+        else return "about a day";
     }
 
     markComplete = () => {
