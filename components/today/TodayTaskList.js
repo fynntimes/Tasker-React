@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
+// simply a container for today's tasks
+
 export default class TodayTaskList extends React.Component {
 
     render() {

@@ -7,7 +7,7 @@ import { Icon } from 'expo';
 This screen shows when the user first launches the app after installing it.
 It prompts the user to either create an account or log in.
 
-NOTE: since this is a demonstration, I haven't yet wired up the Facebook and Google sign ins, they all
+NOTE: since this is a demonstration, I haven't wired up the Facebook and Google sign ins to avoid my API keys being released; they all
 act as demo sign ins for our purposes.
 */
 
@@ -46,6 +46,7 @@ export default class WelcomeScreen extends React.Component {
         ) 
     }
 
+    // sets a fake userToken for our user and then navigates to the main view
     letIn = async () => {
         await AsyncStorage.setItem('userToken', 'abc');
         this.props.navigation.navigate('Main');

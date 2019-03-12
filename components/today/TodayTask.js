@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient, Icon } from 'expo';
-import { markTaskComplete } from '../../data/Task';
+import { markTaskComplete, getDaysUntilDue } from '../../data/Task';
 import moment from 'moment';
 
 import * as firebase from 'firebase';
@@ -18,7 +18,6 @@ export default class TodayTask extends React.Component {
         this.state = {
             complete: this.task.complete
         };
-        console.log(firebase.firestore.Timestamp.fromDate(new Date()));
     }
 
     render() {
@@ -28,6 +27,7 @@ export default class TodayTask extends React.Component {
                 {/* Here we define each part of the task item. The title and description are below. */}
                 <Text style={styles.taskTitle}>{this.task.title}</Text>
                 <Text style={styles.taskDescription}>
+                    {/* we can just directly print the priority string EXCEPT for veryHigh, which needs a space on the user end */}
                     {this.getWeightString()} task, {this.task.priority === "veryHigh" ? "very high" : this.task.priority} priority
                 </Text>
 
@@ -35,10 +35,12 @@ export default class TodayTask extends React.Component {
                 the icon and the text are shown on the same row thanks to some styling. */}
                 <View style={styles.taskDuration}>
                     <Icon.MaterialCommunityIcons name='clock-outline' size={14} style={{color: 'white'}} />
-                    <Text style={{color: 'white', lineHeight: 14}}> due on {}</Text>
+                    <Text style={{color: 'white', lineHeight: 14}}> due { getDaysUntilDue(this.task.dueDate) }</Text>
                 </View>
 
-                {/* What follows is the button row, a horizontal row of three buttons that represent actionable items for the task. */}
+                {/* What follows is the button row, a horizontal row of three buttons that represent actionable items for the task.
+                NOTE: This has been temporarily removed until a future release, where their functionality will be extended. This is
+                due to a change in concept of the project; tasks are now completed in work sessions.
                 <View style={styles.taskButtons}>
                     <TouchableOpacity onPress={this.markComplete} style={styles.taskButton}>
                         <Icon.MaterialCommunityIcons name='check' size={24} style={{color: 'white'}}/>
@@ -51,9 +53,14 @@ export default class TodayTask extends React.Component {
                     <TouchableOpacity onPress={this.rescheduleTask} style={styles.taskButton}>
                         <Icon.MaterialCommunityIcons name='calendar-clock' size={24} style={{color: 'white'}}/>
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </LinearGradient>
         );
+    }
+
+    // since tasks are updated on another screen, we have to tell React to always update this component in case any sudden changes occur.
+    shouldComponentUpdate() {
+        return true;
     }
 
     // assign specific colors to specific priorities. high priority? red. medium? yellow. low? blue.
@@ -64,6 +71,7 @@ export default class TodayTask extends React.Component {
         else return ['#FF4242', '#FF6F6F'];
     }
 
+    // convert the weight of a task from low/normal/high to light/moderate/heavy for users
     getWeightString = () => {
         weight = this.task.duration;
         if(weight === "low") return "light";
@@ -72,6 +80,7 @@ export default class TodayTask extends React.Component {
         else return "very heavy";
     }
 
+    // same thing, but for durations, to a more human friendly format
     getDurationString = () => {
         weight = this.task.duration;
         if(weight === "low") return "about 5 minutes";
@@ -80,26 +89,30 @@ export default class TodayTask extends React.Component {
         else return "about a day";
     }
 
+    // marks the task complete on the database end, sets this task to complete so that it hides itself, and then show a Toast,
+    // which is a small notification at the bottom of the screen.
     markComplete = () => {
         markTaskComplete("task" + this.task.id)
         this.setState({ complete: true }) 
         this.props.toastRef.show("Task marked as complete!")
     }
 
-    editTask = () => {
-        console.log("edited")
-    }
+    // to be implemented in a later release
+    
+    // editTask = () => {
+    //     console.log("edited")
+    // }
 
-    rescheduleTask = () => {
-        console.log("rescheduled")
-    }
+    // rescheduleTask = () => {
+    //     console.log("rescheduled")
+    // }
 
 }
 
 const styles = StyleSheet.create({
     taskView: {
         width: '95%',
-        height: 150,
+        height: 125,
         borderRadius: 5,
         padding: 10,
         marginBottom: 15,

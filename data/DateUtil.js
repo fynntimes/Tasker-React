@@ -9,6 +9,7 @@ export function parseDate(str) {
 }
 
 // returns amount of days between two dates
+// divides by the quantity of one day in milliseconds to avoid daylight saving time influencing the result. 
 export function dateDiff(first, second) {
     return Math.round((second-first)/(1000*60*60*24));
 }

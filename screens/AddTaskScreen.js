@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Container, Content, Form, Item, Picker, Label, Input, DatePicker, Text } from 'native-base';
 import { storeNewTask } from '../data/Task'
 import moment from 'moment';
@@ -65,7 +65,7 @@ export default class AddTaskScreen extends React.Component {
                         <Label>Priority</Label>
                         <Picker
                             mode="dropdown"
-                            style={{ width: undefined }}
+                            style={{ width:(Platform.OS === 'ios') ? undefined : "80%" }}
                             placeholder="Select a priority"
                             placeholderStyle={{ color: "#bfc6ea" }}
                             selectedValue={this.state.priority}
@@ -82,7 +82,7 @@ export default class AddTaskScreen extends React.Component {
                         <Label>Expected duration</Label>
                         <Picker
                             mode="dropdown"
-                            style={{ width: undefined }}
+                            style={{ width:(Platform.OS === 'ios') ? undefined : "80%" }}
                             placeholder="Select an expected duration"
                             placeholderStyle={{ color: "#bfc6ea" }}
                             selectedValue={this.state.length}

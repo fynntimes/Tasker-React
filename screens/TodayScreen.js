@@ -8,7 +8,7 @@ import {
 } from 'react-native'; 
 import { Icon } from 'expo';
 import Toast from 'react-native-easy-toast';
-import { getTasks } from '../data/Task';
+import { getTasks, getAmountTasks } from '../data/Task';
 
 import TodayHeader from '../components/today/TodayHeader'
 import TodayTaskList from '../components/today/TodayTaskList'
@@ -27,6 +27,8 @@ export default class TodayScreen extends React.Component {
     // initially, we have an empty array of tasks and a loading circle in our state.
     this.state = { tasks: [], loading: true }
 
+    // get the tasks and then set our state accordingly.
+    // in react, the only safe way to pass data to the render view is via the state 
     getTasks().then((tasks) => {
       this.setState({tasks: tasks, loading: false})
     })
@@ -34,7 +36,7 @@ export default class TodayScreen extends React.Component {
 
   _refresh = () => {
     // tasks are collected asynchronously, so once we do get them, we set the state accordingly.
-    this.getTasks().then((newTasks) => { 
+    getTasks().then((newTasks) => {
       this.setState({tasks: newTasks, loading: false})
     })
   }
@@ -42,7 +44,9 @@ export default class TodayScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TodayHeader navigation={this.props.navigation}></TodayHeader>
+        <TodayHeader navigation={this.props.navigation} goBack={this._refresh} numTasks={getAmountTasks(this.state.tasks)}></TodayHeader>
+
+        {/* here we define a scrolling view that, when refreshed, triggers our refresh callback */}
         <ScrollView 
           style={styles.contentContainer}
           refreshControl= {
@@ -52,6 +56,7 @@ export default class TodayScreen extends React.Component {
           {/* here, we're making our list of tasks. we loop through each task in our array and output a TodayTask component, which is responsible for rendering it. */}
           <TodayTaskList>
             {this.state.tasks.map((task) => {
+              if(task.complete) return null
               return (
                   <TodayTask key={task.id} task={JSON.stringify(task)} toastRef={this.refs.toast}/>
                 ); 

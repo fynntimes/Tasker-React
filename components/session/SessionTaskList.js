@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+
+// simply a container for all the SessionTask components
 
 export default class SessionTaskList extends React.Component {
 

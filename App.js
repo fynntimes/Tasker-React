@@ -4,6 +4,7 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import * as firebase from 'firebase';
 
+// firebase's boilerplate 
 var firebaseConfig = {
   apiKey: "AIzaSyAy_YfdEVsA0W990bfm2eoZ51R42wlIHDQ",
   authDomain: "tasker-fair.firebaseapp.com",
@@ -37,20 +38,21 @@ export default class App extends React.Component {
     }
   }
 
+  // loads all the resources our app may need
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('./assets/images/today-bg.png'),
-        require('./assets/images/1024-icon.png'),
+        // images would go here if we used them 
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font,
+        ...Icon.Ionicons.font, 
         'roboto': require('./assets/fonts/Roboto-Regular.ttf'),
         'roboto-slab': require('./assets/fonts/RobotoSlab-Regular.ttf'),
         'sourcesanspro': require('./assets/fonts/SourceSansPro-Regular.ttf'),
       }),
       new Promise((resolve, reject) => {
+        // initialize firebase if no apps exist already on our thread
         if(!firebase.apps.length) {
           firebase.initializeApp(firebaseConfig);
           resolve("initialized")

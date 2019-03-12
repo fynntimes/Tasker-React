@@ -7,7 +7,7 @@ import CircleButton from '../components/CircleButton';
 import SessionTaskList from '../components/session/SessionTaskList';
 import SessionTask from '../components/session/SessionTask';
 
-import { getTasks, calculatePriorityScore, markTaskComplete } from '../data/Task';
+import { getTasks, calculatePriorityScore, markTaskComplete, getAmountTasks } from '../data/Task';
 
 // this screen is shown when the user is working on a work session
 // it shows a countdown and a list of possible tasks.
@@ -20,63 +20,84 @@ export default class SessionScreen extends React.Component {
     constructor(props) {
         super(props);
 
+        this.workGradient = ['#1D976C', '#93F9B9'];
+        this.breakGradient = ['#8E2DE2', '#4A00E0'];
+
         this.state = {
             tasks: [],
+            break: false,
+            paused: false
         };
+        this._refresh();
     }
 
     _refresh() {
         getTasks().then((newTasks) => {
-            taskMap = {} // maps priorities to tasks
+            taskMap = new Map(); // maps priorities to tasks
             newTasks.forEach((task) => {
                 // calculate the priority score for each task
                 priorityScore = calculatePriorityScore(task);
-                taskMap[task] = priorityScore;
+                taskMap.set(task, priorityScore);
             })
             
             sorted = new Map([...taskMap.entries()].sort((a, b) => b[1] - a[1]));
-            this.setState({tasks: sorted});
+            empty = getAmountTasks(newTasks) === "0 tasks"
+            this.setState({ tasks: sorted, paused: empty});
         });
     }
 
     render() {
+        // we have to compile our list of tasks here, since we have to iterate through and construct session task objects
+        sessionTasks = [];
+        this.state.tasks.forEach((priorityScore, task) => {
+            sessionTasks.push(<SessionTask key={task.id} task={JSON.stringify(task)} priorityScore={priorityScore} selected={false} completeCallback={() => this._taskComplete(task)}/>);
+        });
+
+        // our state-based UI content is defined here so that we know before we attempt to return a render DOM
+        headerText = this.state.break ? "It's time to take a break." : "It's time to get to work."
+        workText = getAmountTasks(this.state.tasks) === "0 tasks" ? "There are no tasks to work on." : "Work for 25 minutes, then take a break for 5 minutes."
+        pauseOrPlay = this.state.paused ? "play" : "pause"
+
         return (
-            <LinearGradient colors={['#1D976C', '#93F9B9']} style={styles.container}>
+            <LinearGradient colors={this.state.break ? this.breakGradient: this.workGradient } style={styles.container}>
                 
                 <View style={styles.headerContainer}>
-                    {/* todo this text should also say "taking a break" when applicable */}
-                    <Text style={[styles.infoText, {fontSize: 16}]}>It's time to work.</Text>
-                    <SessionTimer countdownDuration="25:00" />                    
+                    <Text style={[styles.infoText, {fontSize: 16}]}>{headerText}</Text>
+                    <SessionTimer workDuration="25" breakDuration="5" paused={this.state.paused} completeCallback={() => { this.setState((prevState) => { return {break: !prevState.break}}) }} />                    
                 </View>
                 
                 <View style={styles.buttonContainer}>
-                    <CircleButton name="pause" size={50} iconSize={25} style={{paddingRight: 10}} onPress={this._takeBreak}/>
+                    <CircleButton name={pauseOrPlay} size={50} iconSize={25} style={{paddingRight: 10}} onPress={this._pause}/>
                     <CircleButton name="fastforward" size={50} iconSize={25} onPress={this._endSession} />
                 </View>
-                
+                 
                 <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
-                    <Text style={[styles.infoText, {fontSize: 12}]}>Tap a task to pause the current one and switch to it.</Text>
+                    <Text style={[styles.infoText, {fontSize: 12}]}>{workText}</Text>
                 </View>
 
                 <ScrollView style={{ marginBottom: 30 }}>
                     <SessionTaskList>
-                        {
-                            Object.keys(this.state.tasks).map((task) => {
-                                return <SessionTask task={JSON.stringify(task)} selected={false} completeCallback={() => {}}/>
-                            })
-                        }
+                        {sessionTasks}
                     </SessionTaskList>
                 </ScrollView>
             </LinearGradient>
         );
     }
 
-    _takeBreak = () => {
-        console.log("taking a break")
+    _taskComplete =  (task) => {
+        markTaskComplete("task" + task.id);
+    }
+
+    _pause = () => {
+        // if we're already paused, take it off paus
+        // otherwise, put it on pause
+        this.setState( prevState => {
+            return { paused: !prevState.paused }
+        });
     };
 
     _endSession = () => {
-        // todo summary screen
+        this.props.navigation.state.params.onGoBack(); 
         this.props.navigation.navigate('Today')
     };
 
