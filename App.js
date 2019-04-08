@@ -2,24 +2,13 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-import * as firebase from 'firebase';
-
-// firebase's boilerplate 
-var firebaseConfig = {
-  apiKey: "AIzaSyAy_YfdEVsA0W990bfm2eoZ51R42wlIHDQ",
-  authDomain: "tasker-fair.firebaseapp.com",
-  databaseURL: "https://tasker-fair.firebaseio.com",
-  projectId: "tasker-fair",
-  storageBucket: "tasker-fair.appspot.com",
-  messagingSenderId: "1029324922421"
-}
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
 
-  render() { 
+  render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -38,26 +27,19 @@ export default class App extends React.Component {
     }
   }
 
-  // loads all the resources our app may need
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        // images would go here if we used them 
+        require('./assets/images/robot-dev.png'),
+        require('./assets/images/robot-prod.png'),
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font, 
-        'roboto': require('./assets/fonts/Roboto-Regular.ttf'),
-        'roboto-slab': require('./assets/fonts/RobotoSlab-Regular.ttf'),
-        'sourcesanspro': require('./assets/fonts/SourceSansPro-Regular.ttf'),
+        ...Icon.Ionicons.font,
+        // We include SpaceMono because we use it in HomeScreen.js. Feel free
+        // to remove this if you are not using it in your app
+        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
-      new Promise((resolve, reject) => {
-        // initialize firebase if no apps exist already on our thread
-        if(!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-          resolve("initialized")
-        }
-      })
     ]);
   };
 

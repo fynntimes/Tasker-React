@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Tasker",
-    "slug": "tasker",
+    "slug": "Tasker2",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -24,11 +24,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "android": {
-      "package": "xyz.faizaan.tasker"
-    },
-    "description": "Tasker, a smart prioritization app.",
-    "githubUrl": "https://github.com/faizaand/Tasker"
+    }
   }
 }

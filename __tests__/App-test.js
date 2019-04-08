@@ -4,9 +4,6 @@ import App from '../App';
 import renderer from 'react-test-renderer';
 import NavigationTestUtils from 'react-navigation/NavigationTestUtils';
 
-// this is the boilerplate testing code that React native provides; it has not been adapted
-// but is left here for future use
-
 describe('App snapshot', () => {
   jest.useFakeTimers();
   beforeEach(() => {
